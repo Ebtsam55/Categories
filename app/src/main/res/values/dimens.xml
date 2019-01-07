@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Category Activity TODO -->
+    <dimen name="icon_margin_layout">5dp</dimen>
+
+</resources>
