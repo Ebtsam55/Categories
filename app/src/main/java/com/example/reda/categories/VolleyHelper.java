@@ -22,11 +22,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.reda.categories.CategoriesFragment.adapter;
 import static com.example.reda.categories.CategoriesFragment.categoryList;
 
 public class VolleyHelper {
 
-    private final static String API_URL = "http://192.168.1.17/ecommerce/public/api/";
+    private final static String API_URL = "http://192.168.1.19/ecommerce/public/api/";
     private final static String TYPE_LOGIN = "login";
     private final static String TYPE_REGISTER = "register";
     private final static String TYPE_UPDATE = "update";
@@ -79,6 +80,8 @@ public class VolleyHelper {
             public void onResponse(JSONObject response) {
                 Log.i("ApiCategoryResponse", response.toString());
 
+
+
                 Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
                     @Override
                     public boolean shouldSkipField(FieldAttributes f) {
@@ -100,17 +103,22 @@ public class VolleyHelper {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     try {
                         CategoryModel model = gson.fromJson(jsonArray.get(i).toString(), CategoryModel.class);
+                        Log.i("ApiCategoryResponse ", model.getName_ar());
                       categoryList.add(model);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                adapter.notifyDataSetChanged();
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                    Log.i("ApiCategoryResponse","Couldn't reach API");
+                Log.i("ApiCategoryResponse ", String.valueOf(error));
+
+
             }
         });
 

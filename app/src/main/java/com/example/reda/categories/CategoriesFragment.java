@@ -21,7 +21,7 @@ public class CategoriesFragment extends Fragment {
     private Unbinder unbinder;
     public static ArrayList<CategoryModel> categoryList;
     public @BindView(R.id.categoryRecyclerView) RecyclerView recyclerView;
-     private CategoryAdapter adapter;
+    public static CategoryAdapter adapter;
      private  GridLayoutManager gridLayoutManager;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
