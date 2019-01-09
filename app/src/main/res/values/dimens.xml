@@ -2,5 +2,7 @@
 <resources>
     <!--Category Activity TODO -->
     <dimen name="icon_margin_layout">5dp</dimen>
+    <dimen name="categoryCard_width">150dp</dimen>
+    <dimen name="categoryCard_height">150dp</dimen>
 
 </resources>

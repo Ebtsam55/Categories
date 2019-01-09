@@ -3,19 +3,29 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class CategoriesFragment extends Fragment {
     private Unbinder unbinder;
+    public static ArrayList<CategoryModel> categoryList;
+    public @BindView(R.id.categoryRecyclerView) RecyclerView recyclerView;
+     private CategoryAdapter adapter;
+     private  GridLayoutManager gridLayoutManager;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -25,6 +35,16 @@ public class CategoriesFragment extends Fragment {
 
         View view= inflater.inflate(R.layout.categories_fragment,container,false);
         unbinder = ButterKnife.bind(this, view);
+
+        categoryList =new ArrayList<>();
+        adapter = new CategoryAdapter(getContext(), categoryList);
+        recyclerView.setAdapter(adapter);
+
+        gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+        loadCategoryRequest();
+
         return view;
     }
 
@@ -33,4 +53,13 @@ public class CategoriesFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    private void loadCategoryRequest()
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.setExplicitApiType("categories");
+        VolleyHelper.loadCategories();
+    }
+
+
 }

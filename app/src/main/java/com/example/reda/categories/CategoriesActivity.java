@@ -76,6 +76,8 @@ public class CategoriesActivity extends AppCompatActivity {
 
     }
 
+
+
     @OnClick(R.id.ic_search)
     void searchAction() {
         Toast.makeText(this, "search has been clicked", Toast.LENGTH_SHORT).show();
