@@ -59,6 +59,7 @@ public class CategoriesFragment extends Fragment {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.setExplicitApiType("categories");
         VolleyHelper.loadCategories();
+        adapter.notifyDataSetChanged();
     }
 
 
