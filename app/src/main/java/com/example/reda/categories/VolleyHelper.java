@@ -1,4 +1,5 @@
 package com.example.reda.categories;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -32,11 +33,12 @@ public class VolleyHelper {
     private final static String TYPE_REGISTER = "register";
     private final static String TYPE_UPDATE = "update";
     private final static String TYPE_CATEGORY = "categories";
-
+    private final static String TYPE_SUBCATEGORY = "categories/subcategory/";
 
 
     private static String requestType;
     private static String recentToken;
+    private static String elementId;
 
 
     private static RequestQueue requestQueue;
@@ -54,8 +56,6 @@ public class VolleyHelper {
     }
 
 
-
-
     private static void setApiType(String type) {
         requestType = type;
     }
@@ -63,23 +63,40 @@ public class VolleyHelper {
 
     private static String getApiUrl() {
         return API_URL + requestType;
+
     }
 
-    public static void setExplicitApiType(String type)
-    {
-        requestType =type;
+    public static void preparePath(String type) {
+        requestType = type;
+    }
+
+    public static void preparePath(String id, String type) {
+        switch (type) {
+            case "SUBCATEGORY":
+                setApiType(TYPE_SUBCATEGORY);
+                break;
+            default:
+                setApiType(TYPE_SUBCATEGORY);
+                break;
+
+        }
+
+        elementId = id;
+    }
+
+    private static String getPath(){
+        Log.i("ApiSubCategoryResponse", elementId);
+
+        return getApiUrl() + elementId;
     }
 
 
 
-
-    public static void loadCategories()
-    {
+    public static void loadCategories() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.i("ApiCategoryResponse", response.toString());
-
+                Log.i("ApiCategoryResponse ", response.toString());
 
 
                 Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
@@ -104,7 +121,9 @@ public class VolleyHelper {
                     try {
                         CategoryModel model = gson.fromJson(jsonArray.get(i).toString(), CategoryModel.class);
                         Log.i("ApiCategoryResponse ", model.getName_ar());
-                      categoryList.add(model);
+                        Log.i("ApiCategoryResponse ", String.valueOf(model.getId()));
+
+                        categoryList.add(model);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -115,8 +134,53 @@ public class VolleyHelper {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                   Log.i("ApiCategoryResponse","Couldn't reach API");
-                Log.i("ApiCategoryResponse ", String.valueOf(error));
+                Log.i("ApiCategoryResponse ", "Couldn't reach API");
+                Log.i("ApiCategoryResponse", String.valueOf(error));
+                Log.i("ApiCategoryResponse", getApiUrl());
+
+
+            }
+        });
+
+        requestQueue.add(request);
+
+
+    }
+
+    public static void loadSubCategories() {
+        Log.i("ApiSubCategoryResponse", "called");
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getPath(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("ApiSubCategoryResponse", response.toString());
+
+
+                Gson gson = new Gson();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        CategoryModel model = gson.fromJson(jsonArray.get(i).toString(), CategoryModel.class);
+                        Log.i("ApiSubCategoryResponse", String.valueOf(model.getId()));
+                        categoryList.add(model);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                adapter.notifyDataSetChanged();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiSubCategoryResponse", "Couldn't reach API");
+                Log.i("ApiSubCategoryResponse", getApiUrl());
+                Log.i("ApiSubCategoryResponse ", String.valueOf(error));
 
 
             }

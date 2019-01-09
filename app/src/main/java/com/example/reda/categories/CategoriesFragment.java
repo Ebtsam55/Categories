@@ -23,6 +23,7 @@ public class CategoriesFragment extends Fragment {
     public @BindView(R.id.categoryRecyclerView) RecyclerView recyclerView;
     public static CategoryAdapter adapter;
      private  GridLayoutManager gridLayoutManager;
+     private CategoryModel model;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class CategoriesFragment extends Fragment {
         View view= inflater.inflate(R.layout.categories_fragment,container,false);
         unbinder = ButterKnife.bind(this, view);
 
+        model=new CategoryModel();
         categoryList =new ArrayList<>();
         adapter = new CategoryAdapter(getContext(), categoryList);
         recyclerView.setAdapter(adapter);
@@ -43,6 +45,7 @@ public class CategoriesFragment extends Fragment {
         gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
 
+      //  loadSubCategoryRequest();
         loadCategoryRequest();
 
         return view;
@@ -54,10 +57,12 @@ public class CategoriesFragment extends Fragment {
         unbinder.unbind();
     }
 
+
+
     private void loadCategoryRequest()
     {
         VolleyHelper.volleyInitialize(getContext());
-        VolleyHelper.setExplicitApiType("categories");
+        VolleyHelper.preparePath("categories");
         VolleyHelper.loadCategories();
         adapter.notifyDataSetChanged();
     }
