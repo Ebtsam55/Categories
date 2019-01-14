@@ -255,6 +255,63 @@ public class VolleyHelper {
 
 
     }
+    public static void loadProduct ()
+    {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("ApiProductResponse ", response.toString());
+
+
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        ProductModel model = gson.fromJson(jsonArray.get(i).toString(), ProductModel.class);
+                        Log.i("ApiProductResponse ", model.getName_ar());
+                        Log.i("ApiProductResponse  ", String.valueOf(model.getId()));
+                        Log.i("ApiProductResponse  ", String.valueOf(model.getPrice()));
+                        Log.i("ApiProductResponse ", model.getHas_offer());
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiProductResponse  ", "Couldn't reach API");
+                Log.i("ApiProductResponse ", String.valueOf(error));
+                Log.i("ApiProductResponse", getApiUrl());
+
+
+            }
+        });
+
+        requestQueue.add(request);
+
+
+    }
 
 
 }
