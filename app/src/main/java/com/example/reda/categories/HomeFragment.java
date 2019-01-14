@@ -24,7 +24,8 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view= inflater.inflate(R.layout.home_fragment,container,false);
-        unbinder = ButterKnife.bind(this, view);
+
+        loadCompanyRequest();
         return view;
     }
 
@@ -32,5 +33,13 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void loadCompanyRequest()
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.preparePath("categories/get-com-shop/4");
+        VolleyHelper.loadCompany();
+
     }
 }

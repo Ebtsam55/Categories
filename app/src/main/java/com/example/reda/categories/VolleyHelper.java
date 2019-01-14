@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +29,13 @@ import static com.example.reda.categories.CategoriesFragment.categoryList;
 
 public class VolleyHelper {
 
-    private final static String API_URL = "http://192.168.1.19/ecommerce/public/api/";
+    private final static String API_URL = "http://192.168.1.17/ecommerce/public/api/";
     private final static String TYPE_LOGIN = "login";
     private final static String TYPE_REGISTER = "register";
     private final static String TYPE_UPDATE = "update";
     private final static String TYPE_CATEGORY = "categories";
     private final static String TYPE_SUBCATEGORY = "categories/subcategory/";
+    private final static String TYPE_COMPANY="categories/get-com-shop/4";
 
 
     private static String requestType;
@@ -181,6 +183,69 @@ public class VolleyHelper {
                 Log.i("ApiSubCategoryResponse", "Couldn't reach API");
                 Log.i("ApiSubCategoryResponse", getApiUrl());
                 Log.i("ApiSubCategoryResponse ", String.valueOf(error));
+
+
+            }
+        });
+
+        requestQueue.add(request);
+
+
+    }
+
+    public static void loadCompany ()
+    {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("ApiCompanyResponse ", response.toString());
+
+
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        CompanyModel model = gson.fromJson(jsonArray.get(i).toString(), CompanyModel.class);
+                        Log.i("ApiCompanyResponse ", model.getName_ar());
+                        Log.i("ApiCompanyResponse  ", String.valueOf(model.getId()));
+                        ShopModel arr[]=model.getShops();
+
+                        for(int j=0;j<model.getShops().length;j++) {
+
+                            Log.i("ApiCompanyResponse ",model.getShops()[j].getPhone());
+                            Log.i("ApiCompanyResponse ",arr[i].getName_ar());
+                            Log.i("ApiCompanyResponse ",arr[i].getImage());
+                            Log.i("ApiCompanyResponse ",arr[i].getPhone());
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiCompanyResponse  ", "Couldn't reach API");
+                Log.i("ApiCompanyResponse ", String.valueOf(error));
+                Log.i("ApiCompanyResponse ", getApiUrl());
 
 
             }
