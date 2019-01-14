@@ -6,13 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class FragmentPager extends FragmentPagerAdapter {
+public class HomeFragmentPager extends FragmentPagerAdapter {
 
     private int TabCounts;
     private Context context;
 
 
-    public FragmentPager(Context mcontext, FragmentManager fm, int tabCount) {
+    public HomeFragmentPager(Context mcontext, FragmentManager fm, int tabCount) {
         super(fm);
         this.TabCounts=tabCount;
         context=mcontext;

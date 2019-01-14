@@ -5,8 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,9 +12,6 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemSelected;
-import butterknife.OnPageChange;
-import butterknife.OnTouch;
 import butterknife.Unbinder;
 
 public class CategoriesActivity extends AppCompatActivity {
@@ -51,7 +46,7 @@ public class CategoriesActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_apps));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        FragmentPager adapter = new FragmentPager(this, getSupportFragmentManager(), tabLayout.getTabCount());
+        HomeFragmentPager adapter = new HomeFragmentPager(this, getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
 
 
