@@ -46,7 +46,7 @@ public class CategoriesFragment extends Fragment {
         recyclerView.setLayoutManager(gridLayoutManager);
 
       //  loadSubCategoryRequest();
-        loadCategoryRequest();
+       loadCategoryRequest();
 
         return view;
     }

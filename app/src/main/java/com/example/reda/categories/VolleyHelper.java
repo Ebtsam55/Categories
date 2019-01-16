@@ -29,7 +29,7 @@ import static com.example.reda.categories.CategoriesFragment.categoryList;
 
 public class VolleyHelper {
 
-    private final static String API_URL = "http://192.168.1.17/ecommerce/public/api/";
+    private final static String API_URL = "http://192.168.1.13/ecommerce/public/api/";
     private final static String TYPE_LOGIN = "login";
     private final static String TYPE_REGISTER = "register";
     private final static String TYPE_UPDATE = "update";
@@ -287,9 +287,7 @@ public class VolleyHelper {
                         Log.i("ApiProductResponse ", model.getName_ar());
                         Log.i("ApiProductResponse  ", String.valueOf(model.getId()));
                         Log.i("ApiProductResponse  ", String.valueOf(model.getPrice()));
-                        Log.i("ApiProductResponse ", model.getHas_offer());
-
-
+                        Log.i("ApiProductResponse ", String.valueOf(model.getHas_offer()));
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -303,6 +301,68 @@ public class VolleyHelper {
                 Log.i("ApiProductResponse  ", "Couldn't reach API");
                 Log.i("ApiProductResponse ", String.valueOf(error));
                 Log.i("ApiProductResponse", getApiUrl());
+
+
+            }
+        });
+
+        requestQueue.add(request);
+
+
+    }
+
+    public static void loadQuestion ()
+    {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+             //   Log.i("ApiQuestionResponse ", response.toString());
+
+
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                       QuestionModel model = gson.fromJson(jsonArray.get(i).toString(), QuestionModel.class);
+                        Log.i("ApiQuestionResponse ", model.getDescription_ar());
+                        Log.i("ApiQuestionResponse  ", String.valueOf(model.getId()));
+                        QuestionChoiceModel arr[]=model.getQuestion_choice();
+
+                        for(int j=0;j<model.getQuestion_choice().length;j++) {
+
+                            Log.i("ApiQuestionResponse ",arr[i].getChoice());
+                            Log.i("ApiQuestionResponse ", String.valueOf(arr[i].getQuestion_id()));
+                            Log.i("ApiQuestionResponse ", String.valueOf(arr[i].getId()));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiQuestionResponse ", "Couldn't reach API");
+                Log.i("ApiQuestionResponsev ", String.valueOf(error));
+                Log.i("ApiQuestionResponse", getApiUrl());
 
 
             }

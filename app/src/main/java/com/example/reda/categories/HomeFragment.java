@@ -25,8 +25,9 @@ public class HomeFragment extends Fragment {
 
         View view= inflater.inflate(R.layout.home_fragment,container,false);
 
-       // loadCompanyRequest();
-        loadProductRequest();
+     //  loadCompanyRequest();
+       loadProductRequest();
+       // loadQuestionRequest();
         return view;
     }
 
@@ -49,6 +50,14 @@ public class HomeFragment extends Fragment {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.preparePath("products/7");
         VolleyHelper.loadProduct();
+
+    }
+
+    private void loadQuestionRequest()
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.preparePath("products/question/6");
+        VolleyHelper.loadQuestion();
 
     }
 }

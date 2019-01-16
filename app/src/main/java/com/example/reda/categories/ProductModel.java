@@ -39,13 +39,13 @@ public class ProductModel implements Serializable {
     private String description_en;
 
     @SerializedName("has_offer")
-    private String has_offer;
+    private int has_offer;
 
-    public String getHas_offer() {
+    public int getHas_offer() {
         return has_offer;
     }
 
-    public void setHas_offer(String has_offer) {
+    public void setHas_offer(int has_offer) {
         this.has_offer = has_offer;
     }
 
