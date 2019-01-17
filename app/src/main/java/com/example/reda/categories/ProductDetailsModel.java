@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class ProductModel implements Serializable {
+public class ProductDetailsModel  implements Serializable {
     @SerializedName("name_en")
     private String name_en;
 
@@ -41,13 +41,17 @@ public class ProductModel implements Serializable {
     @SerializedName("has_offer")
     private String has_offer;
 
-    public String getHas_offer() {
-        return has_offer;
-    }
+    @SerializedName("image")
+    private ImageModel[] image;
 
-    public void setHas_offer(String has_offer) {
-        this.has_offer = has_offer;
-    }
+    @SerializedName("shops")
+    private ShopsModel[] shops;
+
+    @SerializedName("color_size")
+    private ColorSizeModel[] color_size;
+
+    @SerializedName("productoffer")
+    private ProductOfferModel[] productoffer;
 
     public String getName_en() {
         return name_en;
@@ -135,5 +139,45 @@ public class ProductModel implements Serializable {
 
     public void setDescription_en(String description_en) {
         this.description_en = description_en;
+    }
+
+    public String getHas_offer() {
+        return has_offer;
+    }
+
+    public void setHas_offer(String has_offer) {
+        this.has_offer = has_offer;
+    }
+
+    public ImageModel[] getImage() {
+        return image;
+    }
+
+    public void setImage(ImageModel[] image) {
+        this.image = image;
+    }
+
+    public ShopsModel[] getShops() {
+        return shops;
+    }
+
+    public void setShops(ShopsModel[] shops) {
+        this.shops = shops;
+    }
+
+    public ColorSizeModel[] getColor_size() {
+        return color_size;
+    }
+
+    public void setColor_size(ColorSizeModel[] color_size) {
+        this.color_size = color_size;
+    }
+
+    public ProductOfferModel[] getProductoffer() {
+        return productoffer;
+    }
+
+    public void setProductoffer(ProductOfferModel[] productoffer) {
+        this.productoffer = productoffer;
     }
 }

@@ -34,7 +34,7 @@ public class CompanyModel implements Serializable {
     private int number_shop;
 
     @SerializedName("shops")
-    private ShopModel shops[];
+    private ShopModel[] shops;
 
     public ShopModel[] getShops() {
         return shops;

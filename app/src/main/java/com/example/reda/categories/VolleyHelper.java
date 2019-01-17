@@ -35,7 +35,7 @@ public class VolleyHelper {
     private final static String TYPE_UPDATE = "update";
     private final static String TYPE_CATEGORY = "categories";
     private final static String TYPE_SUBCATEGORY = "categories/subcategory/";
-    private final static String TYPE_COMPANY="categories/get-com-shop/4";
+    private final static String TYPE_COMPANY = "categories/get-com-shop/4";
 
 
     private static String requestType;
@@ -86,12 +86,11 @@ public class VolleyHelper {
         elementId = id;
     }
 
-    private static String getPath(){
+    private static String getPath() {
         Log.i("ApiSubCategoryResponse", elementId);
 
         return getApiUrl() + elementId;
     }
-
 
 
     public static void loadCategories() {
@@ -193,8 +192,7 @@ public class VolleyHelper {
 
     }
 
-    public static void loadCompany ()
-    {
+    public static void loadCompany() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -224,14 +222,14 @@ public class VolleyHelper {
                         CompanyModel model = gson.fromJson(jsonArray.get(i).toString(), CompanyModel.class);
                         Log.i("ApiCompanyResponse ", model.getName_ar());
                         Log.i("ApiCompanyResponse  ", String.valueOf(model.getId()));
-                        ShopModel arr[]=model.getShops();
+                        ShopModel arr[] = model.getShops();
 
-                        for(int j=0;j<model.getShops().length;j++) {
+                        for (int j = 0; j < model.getShops().length; j++) {
 
-                            Log.i("ApiCompanyResponse ",model.getShops()[j].getPhone());
-                            Log.i("ApiCompanyResponse ",arr[i].getName_ar());
-                            Log.i("ApiCompanyResponse ",arr[i].getImage());
-                            Log.i("ApiCompanyResponse ",arr[i].getPhone());
+                            Log.i("ApiCompanyResponse ", model.getShops()[j].getPhone());
+                            Log.i("ApiCompanyResponse ", arr[j].getName_ar());
+                            Log.i("ApiCompanyResponse ", arr[j].getImage());
+                            Log.i("ApiCompanyResponse ", arr[j].getPhone());
                         }
 
                     } catch (JSONException e) {
@@ -255,8 +253,8 @@ public class VolleyHelper {
 
 
     }
-    public static void loadProduct ()
-    {
+
+    public static void loadProduct() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -311,12 +309,11 @@ public class VolleyHelper {
 
     }
 
-    public static void loadQuestion ()
-    {
+    public static void loadQuestion() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-             //   Log.i("ApiQuestionResponse ", response.toString());
+                //   Log.i("ApiQuestionResponse ", response.toString());
 
 
                 Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
@@ -339,16 +336,16 @@ public class VolleyHelper {
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
                     try {
-                       QuestionModel model = gson.fromJson(jsonArray.get(i).toString(), QuestionModel.class);
+                        QuestionModel model = gson.fromJson(jsonArray.get(i).toString(), QuestionModel.class);
                         Log.i("ApiQuestionResponse ", model.getDescription_ar());
                         Log.i("ApiQuestionResponse  ", String.valueOf(model.getId()));
-                        QuestionChoiceModel arr[]=model.getQuestion_choice();
+                        QuestionChoiceModel arr[] = model.getQuestion_choice();
 
-                        for(int j=0;j<model.getQuestion_choice().length;j++) {
+                        for (int j = 0; j < model.getQuestion_choice().length; j++) {
 
-                            Log.i("ApiQuestionResponse ",arr[i].getChoice());
-                            Log.i("ApiQuestionResponse ", String.valueOf(arr[i].getQuestion_id()));
-                            Log.i("ApiQuestionResponse ", String.valueOf(arr[i].getId()));
+                            Log.i("ApiQuestionResponse ", arr[j].getChoice());
+                            Log.i("ApiQuestionResponse ", String.valueOf(arr[j].getQuestion_id()));
+                            Log.i("ApiQuestionResponse ", String.valueOf(arr[j].getId()));
                         }
 
                     } catch (JSONException e) {
@@ -372,6 +369,91 @@ public class VolleyHelper {
 
 
     }
+
+    public static void loadProductDetails() {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //   Log.i("ApiProductDetailsRes", response.toString());
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        ProductDetailsModel model = gson.fromJson(jsonArray.get(i).toString(), ProductDetailsModel.class);
+                        Log.i("ApiProductDetailsRes", model.getDescription_ar());
+                        Log.i("ApiProductDetailsRes", String.valueOf(model.getId()));
+
+                        ImageModel[] imageModels = model.getImage();
+                        for (int j=0;j<imageModels.length;j++) {
+                            Log.i("ApiProductDetailsRes ", imageModels[j].getImage());
+                        }
+
+
+                        ShopsModel[] shopsModels = model.getShops();
+                        for (int j=0;j<shopsModels.length;j++) {
+                            Log.i("ApiProductDetailsRes ", String.valueOf(shopsModels[j].getId()));
+                            Log.i("ApiProductDetailsRes ", shopsModels[j].getShop().getPhone());
+                        }
+
+
+                        ColorSizeModel[] colorSizeModels = model.getColor_size();
+                        for(int j=0; j<colorSizeModels.length;j++) {
+                            Log.i("ApiProductDetailsRes ", String.valueOf(colorSizeModels[j].getId()));
+
+                            Log.i("ApiProductDetailsRes ", colorSizeModels[j].getColor().getColor());
+
+                            Log.i("ApiProductDetailsRes ",colorSizeModels[j].getSize().getSize());
+                        }
+
+
+                        ProductOfferModel[] productOfferModels = model.getProductoffer();
+                        for (int j=0; j<productOfferModels.length;j++) {
+
+                            Log.i("ApiProductDetailsRes ", String.valueOf(productOfferModels[j].getId()));
+
+                            Log.i("ApiProductDetailsRes ", String.valueOf(productOfferModels[j].getOffer().getDiscount()));
+                        }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiProductDetailsRes ", "Couldn't reach API");
+                Log.i("ApiProductDetailsRes ", String.valueOf(error));
+                Log.i("ApiProductDetailsRes", getApiUrl());
+
+
+            }
+        });
+
+        requestQueue.add(request);
+
+
+    }
+
+
 
 
 }
