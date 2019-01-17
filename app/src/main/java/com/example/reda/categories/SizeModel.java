@@ -18,6 +18,9 @@ public class SizeModel implements Serializable {
     @SerializedName("size")
     private String size;
 
+    public SizeModel() {
+    }
+
     public String getCreated_at() {
         return created_at;
     }

@@ -18,7 +18,11 @@ public class ColorModel implements Serializable {
     @SerializedName("color")
     private String color;
 
+    public ColorModel() {
+    }
+
     public String getCreated_at() {
+
         return created_at;
     }
 

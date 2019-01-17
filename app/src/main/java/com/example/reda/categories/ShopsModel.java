@@ -25,6 +25,9 @@ public class ShopsModel  implements Serializable {
     @SerializedName("shop")
     private ShopModel shop;
 
+    public ShopsModel() {
+    }
+
     public String getCreated_at() {
         return created_at;
     }

@@ -12,6 +12,7 @@ public class CompanyModel implements Serializable {
     @SerializedName("name_ar")
     private String name_ar;
 
+
     @SerializedName("address_en")
     private String address_en;
 
@@ -35,6 +36,9 @@ public class CompanyModel implements Serializable {
 
     @SerializedName("shops")
     private ShopModel[] shops;
+
+    public CompanyModel() {
+    }
 
     public ShopModel[] getShops() {
         return shops;

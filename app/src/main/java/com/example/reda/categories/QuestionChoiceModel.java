@@ -20,6 +20,9 @@ public class QuestionChoiceModel implements Serializable {
     @SerializedName("choice")
     private String choice;
 
+    public QuestionChoiceModel() {
+    }
+
     public String getCreated_at() {
         return created_at;
     }

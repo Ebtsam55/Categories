@@ -87,6 +87,9 @@ public class ProductOfferModel implements Serializable {
         this.offer_id = offer_id;
     }
 
+    public ProductOfferModel() {
+    }
+
     public OfferModel getOffer() {
         return offer;
     }

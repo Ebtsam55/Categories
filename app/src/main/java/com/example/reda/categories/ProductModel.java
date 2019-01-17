@@ -41,6 +41,9 @@ public class ProductModel implements Serializable {
     @SerializedName("has_offer")
     private String has_offer;
 
+    public ProductModel() {
+    }
+
     public String getHas_offer() {
         return has_offer;
     }

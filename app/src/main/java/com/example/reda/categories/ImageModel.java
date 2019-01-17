@@ -21,6 +21,8 @@ public class ImageModel implements Serializable {
     @SerializedName("image")
     private String image;
 
+    public ImageModel() {
+    }
 
     public String getCreated_at() {
         return created_at;

@@ -53,6 +53,9 @@ public class ProductDetailsModel  implements Serializable {
     @SerializedName("productoffer")
     private ProductOfferModel[] productoffer;
 
+    public ProductDetailsModel() {
+    }
+
     public String getName_en() {
         return name_en;
     }

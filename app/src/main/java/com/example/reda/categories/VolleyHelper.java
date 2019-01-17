@@ -92,6 +92,20 @@ public class VolleyHelper {
         return getApiUrl() + elementId;
     }
 
+    public static void setQuestionAnswer(QuestionAnswerModel data) {
+        userObj = new JSONObject();
+        try {
+            userObj.put("question_id", data.getQuestion_id());
+            userObj.put("choice_id", data.getQuestionChoices_arr());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        preparePath("products/question-answer");
+
+    }
+
 
     public static void loadCategories() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
@@ -358,7 +372,7 @@ public class VolleyHelper {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i("ApiQuestionResponse ", "Couldn't reach API");
-                Log.i("ApiQuestionResponsev ", String.valueOf(error));
+                Log.i("ApiQuestionResponse", String.valueOf(error));
                 Log.i("ApiQuestionResponse", getApiUrl());
 
 
@@ -443,6 +457,62 @@ public class VolleyHelper {
                 Log.i("ApiProductDetailsRes ", "Couldn't reach API");
                 Log.i("ApiProductDetailsRes ", String.valueOf(error));
                 Log.i("ApiProductDetailsRes", getApiUrl());
+
+
+            }
+        });
+
+        requestQueue.add(request);
+
+
+    }
+
+    public static void performQuestionChoice ()
+    {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getApiUrl(), userObj, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                //   Log.i("ApiQuestionResponse ", response.toString());
+
+
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        QuestionAnswerModel model = gson.fromJson(jsonArray.get(i).toString(), QuestionAnswerModel.class);
+
+                        Log.i("ApiQuestionAnswers", String.valueOf(model.getQuestion_id()));
+                        Log.i("ApiQuestionAnswers", String.valueOf(model.getQuestionChoices_arr()[0]));
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiQuestionAnswers", "Couldn't reach API");
+                Log.i("ApiQuestionAnswers ", String.valueOf(error));
+                Log.i("ApiQuestionAnswers", getApiUrl());
 
 
             }

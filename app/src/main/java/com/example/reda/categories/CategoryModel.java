@@ -8,6 +8,7 @@ public class CategoryModel implements Serializable {
     @SerializedName("name_en")
     private String name_en;
 
+
     @SerializedName("name_ar")
     private String name_ar;
 

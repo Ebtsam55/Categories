@@ -35,9 +35,13 @@ public class ShopModel implements Serializable {
     @SerializedName("image")
     private String image;
 
+    public ShopModel() {
+    }
+
     public String getName_en() {
         return name_en;
     }
+
 
     public void setName_en(String name_en) {
         this.name_en = name_en;

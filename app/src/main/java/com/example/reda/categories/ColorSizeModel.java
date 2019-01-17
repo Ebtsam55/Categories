@@ -88,7 +88,11 @@ public class ColorSizeModel implements Serializable {
         this.quantity = quantity;
     }
 
+    public ColorSizeModel() {
+    }
+
     public ColorModel getColor() {
+
         return color;
     }
 

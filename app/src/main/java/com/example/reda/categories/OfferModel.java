@@ -32,6 +32,9 @@ public class OfferModel implements Serializable {
     @SerializedName("end_date")
     private String end_date;
 
+    public OfferModel() {
+    }
+
     public String getCreated_at() {
         return created_at;
     }
