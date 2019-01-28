@@ -13,7 +13,7 @@ import butterknife.Unbinder;
 public class HomeFragment extends Fragment {
 
     private Unbinder unbinder;
-    private  QuestionAnswerModel data;
+    private  QuestionAnswerModel data =new QuestionAnswerModel();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,12 +26,12 @@ public class HomeFragment extends Fragment {
 
         View view= inflater.inflate(R.layout.home_fragment,container,false);
 
-      loadCompanyRequest();
-       loadProductRequest();
+     // loadCompanyRequest();
+     //  loadProductRequest();
      loadQuestionRequest();
-     performQuestionAnswer( data);
+      performQuestionAnswer( data);
 
-     loadProductDetailsRequest();
+   loadProductDetailsRequest();
         return view;
     }
 
@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
     {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.setQuestionAnswer(data);
-        VolleyHelper.performQuestionChoice();
+        VolleyHelper.performQuestionAns();
 
     }
 }

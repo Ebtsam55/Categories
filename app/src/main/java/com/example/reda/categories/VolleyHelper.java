@@ -7,20 +7,17 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +26,7 @@ import static com.example.reda.categories.CategoriesFragment.categoryList;
 
 public class VolleyHelper {
 
-    private final static String API_URL = "http://192.168.1.13/ecommerce/public/api/";
+    private final static String API_URL = "http://192.168.1.17/ecommerce/public/api/";
     private final static String TYPE_LOGIN = "login";
     private final static String TYPE_REGISTER = "register";
     private final static String TYPE_UPDATE = "update";
@@ -96,7 +93,12 @@ public class VolleyHelper {
         userObj = new JSONObject();
         try {
             userObj.put("question_id", data.getQuestion_id());
-            userObj.put("choice_id", data.getQuestionChoices_arr());
+            userObj.put("choice_id",  new JSONArray(data.getQuestionChoices_arr() ));
+
+            Log.i("ApiQuestionAnswers", String.valueOf(data.getQuestion_id()));
+            Log.i("ApiQuestionAnswers", String.valueOf(data.getQuestionChoices_arr()[3]));
+
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -384,6 +386,7 @@ public class VolleyHelper {
 
     }
 
+
     public static void loadProductDetails() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
             @Override
@@ -401,54 +404,48 @@ public class VolleyHelper {
                     }
                 }).create();
 
-                JSONArray jsonArray = null;
                 try {
-                    jsonArray = response.getJSONArray("success");
+                    JSONObject jsonObject = response.getJSONObject("success");
+
+                    ProductDetailsModel model = gson.fromJson(jsonObject.toString(), ProductDetailsModel.class);
+                    Log.i("ApiProductDetailsRes", model.getDescription_ar());
+                    Log.i("ApiProductDetailsRes", String.valueOf(model.getId()));
+
+                    ImageModel[] imageModels = model.getImage();
+                    for (int j = 0; j < imageModels.length; j++) {
+                        Log.i("ApiProductDetailsRes ", imageModels[j].getImage());
+                    }
+
+
+                    ShopsModel[] shopsModels = model.getShops();
+                    for (int j = 0; j < shopsModels.length; j++) {
+                        Log.i("ApiProductDetailsRes ", String.valueOf(shopsModels[j].getId()));
+                        Log.i("ApiProductDetailsRes ", shopsModels[j].getShop().getPhone());
+                    }
+
+
+                    ColorSizeModel[] colorSizeModels = model.getColor_size();
+                    for (int j = 0; j < colorSizeModels.length; j++) {
+                        Log.i("ApiProductDetailsRes ", String.valueOf(colorSizeModels[j].getId()));
+
+                        Log.i("ApiProductDetailsRes ", colorSizeModels[j].getColor().getColor());
+
+                        Log.i("ApiProductDetailsRes ", colorSizeModels[j].getSize().getSize());
+                    }
+
+
+                    ProductOfferModel[] productOfferModels = model.getProductoffer();
+                    for (int j = 0; j < productOfferModels.length; j++) {
+
+                        Log.i("ApiProductDetailsRes ", String.valueOf(productOfferModels[j].getId()));
+
+                        Log.i("ApiProductDetailsRes ", String.valueOf(productOfferModels[j].getOffer().getDiscount()));
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    try {
-                        ProductDetailsModel model = gson.fromJson(jsonArray.get(i).toString(), ProductDetailsModel.class);
-                        Log.i("ApiProductDetailsRes", model.getDescription_ar());
-                        Log.i("ApiProductDetailsRes", String.valueOf(model.getId()));
 
-                        ImageModel[] imageModels = model.getImage();
-                        for (int j=0;j<imageModels.length;j++) {
-                            Log.i("ApiProductDetailsRes ", imageModels[j].getImage());
-                        }
-
-
-                        ShopsModel[] shopsModels = model.getShops();
-                        for (int j=0;j<shopsModels.length;j++) {
-                            Log.i("ApiProductDetailsRes ", String.valueOf(shopsModels[j].getId()));
-                            Log.i("ApiProductDetailsRes ", shopsModels[j].getShop().getPhone());
-                        }
-
-
-                        ColorSizeModel[] colorSizeModels = model.getColor_size();
-                        for(int j=0; j<colorSizeModels.length;j++) {
-                            Log.i("ApiProductDetailsRes ", String.valueOf(colorSizeModels[j].getId()));
-
-                            Log.i("ApiProductDetailsRes ", colorSizeModels[j].getColor().getColor());
-
-                            Log.i("ApiProductDetailsRes ",colorSizeModels[j].getSize().getSize());
-                        }
-
-
-                        ProductOfferModel[] productOfferModels = model.getProductoffer();
-                        for (int j=0; j<productOfferModels.length;j++) {
-
-                            Log.i("ApiProductDetailsRes ", String.valueOf(productOfferModels[j].getId()));
-
-                            Log.i("ApiProductDetailsRes ", String.valueOf(productOfferModels[j].getOffer().getDiscount()));
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
 
             }
         }, new Response.ErrorListener() {
@@ -467,63 +464,53 @@ public class VolleyHelper {
 
     }
 
-    public static void performQuestionChoice ()
-    {
+    public static void performQuestionAns() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getApiUrl(), userObj, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                //   Log.i("ApiQuestionResponse ", response.toString());
 
-
-                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
-                    @Override
-                    public boolean shouldSkipField(FieldAttributes f) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean shouldSkipClass(Class<?> clazz) {
-                        return false;
-                    }
-                }).create();
-
-                JSONArray jsonArray = null;
                 try {
-                    jsonArray = response.getJSONArray("success");
+                    Log.i("ApiQuestionAnswers ", response.toString());
+
+                    JSONObject jsonObject = response.getJSONObject("success");
+
+                    Log.i("ApiQuestionAnswers", String.valueOf(jsonObject));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    try {
-                        QuestionAnswerModel model = gson.fromJson(jsonArray.get(i).toString(), QuestionAnswerModel.class);
-
-                        Log.i("ApiQuestionAnswers", String.valueOf(model.getQuestion_id()));
-                        Log.i("ApiQuestionAnswers", String.valueOf(model.getQuestionChoices_arr()[0]));
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 Log.i("ApiQuestionAnswers", "Couldn't reach API");
                 Log.i("ApiQuestionAnswers ", String.valueOf(error));
                 Log.i("ApiQuestionAnswers", getApiUrl());
 
 
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                final Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
+
+                return headers;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+        };
 
         requestQueue.add(request);
 
 
     }
-
-
 
 
 }
