@@ -30,4 +30,5 @@ public class QuestionAnswerModel implements Serializable {
     public void setQuestionChoices_arr(int[] questionChoices_arr) {
         this.questionChoices_arr = questionChoices_arr;
     }
+
 }

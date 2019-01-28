@@ -108,6 +108,24 @@ public class VolleyHelper {
 
     }
 
+    public static void setFollowUnFollow(FollowUnFollowModel data) {
+        userObj = new JSONObject();
+        try {
+            userObj.put("user_id", data.getUser_id());
+            userObj.put("follow_id", data.getFollow_id());
+            userObj.put("type", data.getType());
+            userObj.put("send_type", data.getSend_type());
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        preparePath("follows/follow-unfollow");
+
+    }
+
 
     public static void loadCategories() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
@@ -470,11 +488,11 @@ public class VolleyHelper {
             public void onResponse(JSONObject response) {
 
                 try {
-                    Log.i("ApiQuestionAnswers ", response.toString());
 
-                    JSONObject jsonObject = response.getJSONObject("success");
 
-                    Log.i("ApiQuestionAnswers", String.valueOf(jsonObject));
+                    String result = response.getString("success");
+
+                    Log.i("ApiQuestionAnswers", result);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -485,7 +503,7 @@ public class VolleyHelper {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.i("ApiQuestionAnswers", "Couldn't reach API");
+                Log.i("ApiQuestionAnswers ", "Couldn't reach API");
                 Log.i("ApiQuestionAnswers ", String.valueOf(error));
                 Log.i("ApiQuestionAnswers", getApiUrl());
 
@@ -511,6 +529,158 @@ public class VolleyHelper {
 
 
     }
+
+    public static  void requestFollowUnFollow()
+    {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getApiUrl(), userObj, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+
+
+                try {
+                    //Log.i("ApiFollowUnFollowReq", response.toString());
+
+                    String result = response.getString("success");
+
+                    Log.i("ApiFollowUnFollowReq", result);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Log.i("ApiFollowUnFollowReq", "Couldn't reach API");
+                Log.i("ApiFollowUnFollowReq", String.valueOf(error));
+                Log.i("ApiFollowUnFollowReq", getApiUrl());
+
+
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() {
+                final Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
+
+                return headers;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+        };
+
+        requestQueue.add(request);
+
+    }
+
+    public static void requestFollowedCompanyList()
+    {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                       FollowedCompanyModel model = gson.fromJson(jsonArray.get(i).toString(),FollowedCompanyModel.class);
+                        Log.i("ApiFollowedCompanyList ", model.getName_ar());
+                        Log.i("ApiFollowedCompanyList ", String.valueOf(model.getId()));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiFollowedCompanyList ", "Couldn't reach API");
+                Log.i("ApiFollowedCompanyList ", String.valueOf(error));
+                Log.i("ApiFollowedCompanyList ", getApiUrl());
+
+
+            }
+        });
+
+        requestQueue.add(request);
+    }
+
+    public static void requestFollowedUsersList()
+    {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        FollowedUserModel model = gson.fromJson(jsonArray.get(i).toString(),FollowedUserModel.class);
+                        Log.i("ApiFollowedUsersList ", model.getName_ar());
+                        Log.i("ApiFollowedUsersList ", String.valueOf(model.getId()));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiFollowedUsersList ", "Couldn't reach API");
+                Log.i("ApiFollowedUsersList ", String.valueOf(error));
+                Log.i("ApiFollowedUsersList ", getApiUrl());
+
+
+            }
+        });
+
+        requestQueue.add(request);
+    }
+
+
 
 
 }

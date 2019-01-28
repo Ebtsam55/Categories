@@ -1,4 +1,5 @@
 package com.example.reda.categories;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,10 +11,12 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+
 public class HomeFragment extends Fragment {
 
     private Unbinder unbinder;
-    private  QuestionAnswerModel data =new QuestionAnswerModel();
+    private QuestionAnswerModel data = new QuestionAnswerModel();
+    private FollowUnFollowModel followModel = new FollowUnFollowModel();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,14 +27,29 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view= inflater.inflate(R.layout.home_fragment,container,false);
+        View view = inflater.inflate(R.layout.home_fragment, container, false);
 
-     // loadCompanyRequest();
-     //  loadProductRequest();
-     loadQuestionRequest();
-      performQuestionAnswer( data);
+        followModel.setUser_id(33);
+        followModel.setFollow_id(34);
+        followModel.setType("user");
+        followModel.setSend_type("follow");
 
-   loadProductDetailsRequest();
+         loadCompanyRequest();
+
+         loadProductRequest();
+
+        loadQuestionRequest();
+
+        performQuestionAnswer(data);
+
+        FollowUnFollowReq(followModel);
+
+        loadProductDetailsRequest();
+
+       loadFollowedCompanyList();
+
+       loadFollowedUsersList();
+
         return view;
     }
 
@@ -41,43 +59,59 @@ public class HomeFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void loadCompanyRequest()
-    {
+    private void loadCompanyRequest() {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.preparePath("categories/get-com-shop/4");
         VolleyHelper.loadCompany();
 
     }
 
-    private void loadProductRequest()
-    {
+    private void loadProductRequest() {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.preparePath("products/7");
         VolleyHelper.loadProduct();
 
     }
 
-    private void loadProductDetailsRequest()
-    {
+    private void loadProductDetailsRequest() {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.preparePath("products/get-product/20");
         VolleyHelper.loadProductDetails();
 
     }
 
-    private void loadQuestionRequest()
-    {
+    private void loadQuestionRequest() {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.preparePath("products/question/6");
         VolleyHelper.loadQuestion();
 
     }
 
-    private void performQuestionAnswer( QuestionAnswerModel data)
-    {
+    private void performQuestionAnswer(QuestionAnswerModel data) {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.setQuestionAnswer(data);
         VolleyHelper.performQuestionAns();
+
+    }
+
+    private void FollowUnFollowReq(FollowUnFollowModel data) {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.setFollowUnFollow(data);
+        VolleyHelper.requestFollowUnFollow();
+
+    }
+
+    private void loadFollowedCompanyList() {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.preparePath("follows/company/33");
+        VolleyHelper.requestFollowedCompanyList();
+
+    }
+
+    private void loadFollowedUsersList() {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.preparePath("follows/user/33");
+        VolleyHelper.requestFollowedUsersList();
 
     }
 }
