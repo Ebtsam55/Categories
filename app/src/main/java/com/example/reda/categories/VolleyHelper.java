@@ -89,15 +89,16 @@ public class VolleyHelper {
         return getApiUrl() + elementId;
     }
 
+
+    //set Body for performQuestionAns
     public static void setQuestionAnswer(QuestionAnswerModel data) {
         userObj = new JSONObject();
         try {
             userObj.put("question_id", data.getQuestion_id());
-            userObj.put("choice_id",  new JSONArray(data.getQuestionChoices_arr() ));
+            userObj.put("choice_id", new JSONArray(data.getQuestionChoices_arr()));
 
             Log.i("ApiQuestionAnswers", String.valueOf(data.getQuestion_id()));
             Log.i("ApiQuestionAnswers", String.valueOf(data.getQuestionChoices_arr()[3]));
-
 
 
         } catch (JSONException e) {
@@ -108,6 +109,8 @@ public class VolleyHelper {
 
     }
 
+
+    //set Body for requestFollowUnFollow
     public static void setFollowUnFollow(FollowUnFollowModel data) {
         userObj = new JSONObject();
         try {
@@ -115,7 +118,6 @@ public class VolleyHelper {
             userObj.put("follow_id", data.getFollow_id());
             userObj.put("type", data.getType());
             userObj.put("send_type", data.getSend_type());
-
 
 
         } catch (JSONException e) {
@@ -509,7 +511,7 @@ public class VolleyHelper {
 
 
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() {
                 final Map<String, String> headers = new HashMap<>();
@@ -530,12 +532,10 @@ public class VolleyHelper {
 
     }
 
-    public static  void requestFollowUnFollow()
-    {
+    public static void requestFollowUnFollow() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getApiUrl(), userObj, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
 
 
                 try {
@@ -560,7 +560,7 @@ public class VolleyHelper {
 
 
             }
-        }){
+        }) {
             @Override
             public Map<String, String> getHeaders() {
                 final Map<String, String> headers = new HashMap<>();
@@ -580,8 +580,7 @@ public class VolleyHelper {
 
     }
 
-    public static void requestFollowedCompanyList()
-    {
+    public static void requestFollowedCompanyList() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -606,7 +605,7 @@ public class VolleyHelper {
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
                     try {
-                       FollowedCompanyModel model = gson.fromJson(jsonArray.get(i).toString(),FollowedCompanyModel.class);
+                        FollowedCompanyModel model = gson.fromJson(jsonArray.get(i).toString(), FollowedCompanyModel.class);
                         Log.i("ApiFollowedCompanyList ", model.getName_ar());
                         Log.i("ApiFollowedCompanyList ", String.valueOf(model.getId()));
 
@@ -630,8 +629,7 @@ public class VolleyHelper {
         requestQueue.add(request);
     }
 
-    public static void requestFollowedUsersList()
-    {
+    public static void requestFollowedUsersList() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -656,7 +654,7 @@ public class VolleyHelper {
                 }
                 for (int i = 0; i < jsonArray.length(); i++) {
                     try {
-                        FollowedUserModel model = gson.fromJson(jsonArray.get(i).toString(),FollowedUserModel.class);
+                        FollowedUserModel model = gson.fromJson(jsonArray.get(i).toString(), FollowedUserModel.class);
                         Log.i("ApiFollowedUsersList ", model.getName_ar());
                         Log.i("ApiFollowedUsersList ", String.valueOf(model.getId()));
 
@@ -681,6 +679,115 @@ public class VolleyHelper {
     }
 
 
+    public static void loadRecommendsFromUsers() {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("ApiRecommendsFromUsers ", response.toString());
+
+
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        RecommendsFromModel model = gson.fromJson(jsonArray.get(i).toString(), RecommendsFromModel.class);
+                        Log.i("ApiRecommendsFromUsers ", model.getMessage());
+                        Log.i("ApiRecommendsFromUsers ", String.valueOf(model.getId()));
+
+                        Log.i("ApiRecommendsFromUsers ", model.getRecommend_from().getName_ar());
+                        Log.i("ApiRecommendsFromUsers ", model.getRecommend_product().getName_ar());
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiRecommendsFromUsers ", "Couldn't reach API");
+                Log.i("ApiRecommendsFromUsers ", String.valueOf(error));
+                Log.i("ApiRecommendsFromUsers ", getApiUrl());
+
+
+            }
+        });
+
+        requestQueue.add(request);
+    }
+
+    public static void LoadRecommendsToUsers() {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("ApiRecommendsToUsers ", response.toString());
+
+
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        RecommendsToModel model = gson.fromJson(jsonArray.get(i).toString(), RecommendsToModel.class);
+                        Log.i("ApiRecommendsToUsers ", model.getMessage());
+                        Log.i("ApiRecommendsToUsers ", String.valueOf(model.getId()));
+
+                        Log.i("ApiRecommendsToUsers ", model.getRecommend_from().getName_ar());
+                        Log.i("ApiRecommendsToUsers ", model.getRecommend_product().getName_ar());
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiRecommendsToUsers ", "Couldn't reach API");
+                Log.i("ApiRecommendsToUsers ", String.valueOf(error));
+                Log.i("ApiRecommendsToUsers ", getApiUrl());
+
+
+            }
+        });
+
+        requestQueue.add(request);
+    }
 
 
 }

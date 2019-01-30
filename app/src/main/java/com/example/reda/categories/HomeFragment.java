@@ -50,6 +50,10 @@ public class HomeFragment extends Fragment {
 
        loadFollowedUsersList();
 
+       loadRecommendationsFromUsers();
+
+       LoadRecommendationsToUsers();
+
         return view;
     }
 
@@ -113,5 +117,21 @@ public class HomeFragment extends Fragment {
         VolleyHelper.preparePath("follows/user/33");
         VolleyHelper.requestFollowedUsersList();
 
+    }
+
+
+    private void loadRecommendationsFromUsers()
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.preparePath("recommends/user-recommend/33");
+        VolleyHelper.requestFollowedUsersList();
+    }
+
+
+    private void  LoadRecommendationsToUsers()
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.preparePath("recommends/recommended/33");
+        VolleyHelper.requestFollowedUsersList();
     }
 }
