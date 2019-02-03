@@ -26,7 +26,7 @@ import static com.example.reda.categories.CategoriesFragment.categoryList;
 
 public class VolleyHelper {
 
-    private final static String API_URL = "http://192.168.1.17/ecommerce/public/api/";
+    private final static String API_URL = "http://192.168.1.6/ecommerce/public/api/";
     private final static String TYPE_LOGIN = "login";
     private final static String TYPE_REGISTER = "register";
     private final static String TYPE_UPDATE = "update";
@@ -125,6 +125,25 @@ public class VolleyHelper {
         }
 
         preparePath("follows/follow-unfollow");
+
+    }
+
+
+    public static void setRecommend (SendRecommendModel data)
+    {
+        userObj=new JSONObject();
+        try {
+            userObj.put("user_id", data.getUser_id());
+            userObj.put("recommend_id", data.getRecommend_id());
+            userObj.put("product_id",data.getProduct_id());
+            userObj.put("message",data.getMessage());
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        preparePath("recommends");
 
     }
 
@@ -734,7 +753,7 @@ public class VolleyHelper {
         requestQueue.add(request);
     }
 
-    public static void LoadRecommendsToUsers() {
+    public static void loadRecommendsToUsers() {
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, getApiUrl(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -788,6 +807,52 @@ public class VolleyHelper {
 
         requestQueue.add(request);
     }
+
+    public static void sendRecommend(){ final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getApiUrl(), userObj, new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+
+
+            try {
+                //Log.i("ApiFollowUnFollowReq", response.toString());
+
+                String result = response.getString("success");
+
+                Log.i("ApiSendRecommend", result);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+            Log.i("ApiSendRecommend", "Couldn't reach API");
+            Log.i("ApiSendRecommend", String.valueOf(error));
+            Log.i("ApiSendRecommend", getApiUrl());
+
+
+        }
+    }) {
+        @Override
+        public Map<String, String> getHeaders() {
+            final Map<String, String> headers = new HashMap<>();
+            headers.put("Content-Type", "application/json");
+            headers.put("Accept", "application/json");
+
+            return headers;
+        }
+
+        @Override
+        public String getBodyContentType() {
+            return "application/json; charset=utf-8";
+        }
+    };
+
+        requestQueue.add(request);}
+
 
 
 }

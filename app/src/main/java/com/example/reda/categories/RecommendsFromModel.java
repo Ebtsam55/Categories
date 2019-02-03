@@ -27,7 +27,7 @@ public class RecommendsFromModel implements Serializable {
     private String message;
 
     @SerializedName("user")
-    private UserRecFromModel recommend_from;
+    private UserRecommendsFromModel recommend_from;
 
     @SerializedName("product")
     private RecommendedProduct recommend_product;
@@ -91,11 +91,11 @@ public class RecommendsFromModel implements Serializable {
         this.message = message;
     }
 
-    public UserRecFromModel getRecommend_from() {
+    public UserRecommendsFromModel getRecommend_from() {
         return recommend_from;
     }
 
-    public void setRecommend_from(UserRecFromModel recommend_from) {
+    public void setRecommend_from(UserRecommendsFromModel recommend_from) {
         this.recommend_from = recommend_from;
     }
 

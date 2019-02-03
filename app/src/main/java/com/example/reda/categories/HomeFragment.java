@@ -16,7 +16,8 @@ public class HomeFragment extends Fragment {
 
     private Unbinder unbinder;
     private QuestionAnswerModel data = new QuestionAnswerModel();
-    private FollowUnFollowModel followModel = new FollowUnFollowModel();
+    private FollowUnFollowModel followModelObj = new FollowUnFollowModel();
+    private SendRecommendModel recommendModel=new SendRecommendModel();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,10 +30,17 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.home_fragment, container, false);
 
-        followModel.setUser_id(33);
-        followModel.setFollow_id(34);
-        followModel.setType("user");
-        followModel.setSend_type("follow");
+
+        followModelObj.setUser_id(33);
+        followModelObj.setFollow_id(34);
+        followModelObj.setType("user");
+        followModelObj.setSend_type("follow");
+
+
+        recommendModel.setMessage("bjdsbhfhjkf");
+        recommendModel.setUser_id(33);
+        recommendModel.setRecommend_id(34);
+        recommendModel.setProduct_id(20);
 
          loadCompanyRequest();
 
@@ -42,7 +50,7 @@ public class HomeFragment extends Fragment {
 
         performQuestionAnswer(data);
 
-        FollowUnFollowReq(followModel);
+        FollowUnFollowReq(followModelObj);
 
         loadProductDetailsRequest();
 
@@ -50,9 +58,11 @@ public class HomeFragment extends Fragment {
 
        loadFollowedUsersList();
 
-       loadRecommendationsFromUsers();
+      loadRecommendationsFromUsers();
 
-       LoadRecommendationsToUsers();
+      LoadRecommendationsToUsers();
+
+      sendRecommend(recommendModel);
 
         return view;
     }
@@ -124,14 +134,22 @@ public class HomeFragment extends Fragment {
     {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.preparePath("recommends/user-recommend/33");
-        VolleyHelper.requestFollowedUsersList();
+        VolleyHelper.loadRecommendsFromUsers();
     }
 
 
     private void  LoadRecommendationsToUsers()
     {
         VolleyHelper.volleyInitialize(getContext());
-        VolleyHelper.preparePath("recommends/recommended/33");
-        VolleyHelper.requestFollowedUsersList();
+        VolleyHelper.preparePath("recommends/recommend-user/33");
+        VolleyHelper.loadRecommendsToUsers();
+    }
+
+    private  void sendRecommend(SendRecommendModel data)
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.setRecommend(data);
+        VolleyHelper.sendRecommend();
+
     }
 }

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class UserRecToMadel implements Serializable {
+public class UserRecommendsFromModel implements Serializable {
     @SerializedName("name_en")
     private String name_en;
 
@@ -55,7 +55,7 @@ public class UserRecToMadel implements Serializable {
     @SerializedName("image")
     private String image;
 
-    public UserRecToMadel() {
+    public UserRecommendsFromModel() {
     }
 
     public String getName_en() {
