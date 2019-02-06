@@ -26,20 +26,21 @@ public class RecommendsToModel implements Serializable {
     private String message;
 
     @SerializedName("recommend")
-    private UserRecommendsToModel recommend_from;
+    private UserModel recommend_to;
 
-    public RecommendedProduct getRecommend_product() {
+
+    @SerializedName("product")
+    private ProductModel recommend_product;
+
+    public RecommendsToModel() {
+    }
+
+    public ProductModel getRecommend_product() {
         return recommend_product;
     }
 
-    public void setRecommend_product(RecommendedProduct recommend_product) {
+    public void setRecommend_product(ProductModel recommend_product) {
         this.recommend_product = recommend_product;
-    }
-
-    @SerializedName("product")
-    private RecommendedProduct recommend_product;
-
-    public RecommendsToModel() {
     }
 
     public String getCreated_at() {
@@ -98,11 +99,11 @@ public class RecommendsToModel implements Serializable {
         this.message = message;
     }
 
-    public UserRecommendsToModel getRecommend_from() {
-        return recommend_from;
+    public UserModel getRecommend_to() {
+        return recommend_to;
     }
 
-    public void setRecommend_from(UserRecommendsToModel recommend_from) {
-        this.recommend_from = recommend_from;
+    public void setRecommend_to(UserModel recommend_to) {
+        this.recommend_to = recommend_to;
     }
 }

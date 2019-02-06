@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class UserRecommendsToModel implements Serializable {
+public class UsersByPhoneModel implements Serializable {
+
     @SerializedName("name_en")
     private String name_en;
 
@@ -17,6 +18,10 @@ public class UserRecommendsToModel implements Serializable {
     @SerializedName("address_ar")
     private String address_ar;
 
+
+    @SerializedName("id")
+    private int id;
+
     @SerializedName("created_at")
     private String created_at;
 
@@ -25,10 +30,6 @@ public class UserRecommendsToModel implements Serializable {
 
     @SerializedName("facebook_id")
     private int facebook_id;
-
-    @SerializedName("id")
-    private int id;
-
 
     @SerializedName("phone")
     private String phone;
@@ -55,7 +56,7 @@ public class UserRecommendsToModel implements Serializable {
     @SerializedName("image")
     private String image;
 
-    public UserRecommendsToModel() {
+    public UsersByPhoneModel() {
     }
 
     public String getName_en() {
@@ -90,6 +91,14 @@ public class UserRecommendsToModel implements Serializable {
         this.address_ar = address_ar;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getCreated_at() {
         return created_at;
     }
@@ -112,14 +121,6 @@ public class UserRecommendsToModel implements Serializable {
 
     public void setFacebook_id(int facebook_id) {
         this.facebook_id = facebook_id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getPhone() {

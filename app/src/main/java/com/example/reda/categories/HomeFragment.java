@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
@@ -17,7 +16,9 @@ public class HomeFragment extends Fragment {
     private Unbinder unbinder;
     private QuestionAnswerModel data = new QuestionAnswerModel();
     private FollowUnFollowModel followModelObj = new FollowUnFollowModel();
-    private SendRecommendModel recommendModel=new SendRecommendModel();
+    private RecommendRequestModel recommendModel=new RecommendRequestModel();
+    private PhoneContactsListModel contactsList= new PhoneContactsListModel();
+    private FavoriteRequestModel favoriteModel = new FavoriteRequestModel();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +43,14 @@ public class HomeFragment extends Fragment {
         recommendModel.setRecommend_id(34);
         recommendModel.setProduct_id(20);
 
+        contactsList.getContactsList().add("123");
+        contactsList.getContactsList().add("874564547");
+
+
+        favoriteModel.setProduct_id(20);
+        favoriteModel.setUser_id(33);
+
+
          loadCompanyRequest();
 
          loadProductRequest();
@@ -52,7 +61,7 @@ public class HomeFragment extends Fragment {
 
         FollowUnFollowReq(followModelObj);
 
-        loadProductDetailsRequest();
+       loadProductDetailsRequest();
 
        loadFollowedCompanyList();
 
@@ -63,6 +72,12 @@ public class HomeFragment extends Fragment {
       LoadRecommendationsToUsers();
 
       sendRecommend(recommendModel);
+
+      sendContactsList(contactsList);
+
+      loadFavoriteRequest(favoriteModel);
+
+      loadFavoriteList();
 
         return view;
     }
@@ -134,7 +149,7 @@ public class HomeFragment extends Fragment {
     {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.preparePath("recommends/user-recommend/33");
-        VolleyHelper.loadRecommendsFromUsers();
+        VolleyHelper.requestRecommendsFromUsers();
     }
 
 
@@ -142,14 +157,37 @@ public class HomeFragment extends Fragment {
     {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.preparePath("recommends/recommend-user/33");
-        VolleyHelper.loadRecommendsToUsers();
+        VolleyHelper.requestsRecommendsToUsers();
     }
 
-    private  void sendRecommend(SendRecommendModel data)
+    private  void sendRecommend(RecommendRequestModel data)
     {
         VolleyHelper.volleyInitialize(getContext());
-        VolleyHelper.setRecommend(data);
-        VolleyHelper.sendRecommend();
+        VolleyHelper.setRecommendRequest(data);
+        VolleyHelper.sendRecommendRequest();
 
+    }
+
+    private void sendContactsList(PhoneContactsListModel data)
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.setPhoneContactsRequest(data);
+        VolleyHelper.requestPhoneContactsList();
+
+    }
+
+
+    private  void loadFavoriteRequest(FavoriteRequestModel data)
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.setFavoriateRequest(data);
+        VolleyHelper.loadFavoriteRequest();
+    }
+
+    private  void loadFavoriteList()
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.preparePath("favorites/favorite-list/33");
+        VolleyHelper.loadFavoriteList();
     }
 }
