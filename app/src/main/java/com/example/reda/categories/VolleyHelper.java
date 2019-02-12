@@ -150,7 +150,7 @@ public class VolleyHelper {
     public static void setPhoneContactsRequest(PhoneContactsListModel data) {
         userObj = new JSONObject();
         try {
-            userObj.put("contects_list", new JSONArray(data.getContactsList()));
+            userObj.put("contects_list", new JSONArray(data.getContactsList().toArray()));
             Log.i("ApiPhone", new JSONArray(data.getContactsList()).toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -487,7 +487,7 @@ public class VolleyHelper {
                     ShopsModel[] shopsModels = model.getShops();
                     for (int j = 0; j < shopsModels.length; j++) {
                         Log.i("ApiProductDetailsRes ", String.valueOf(shopsModels[j].getId()));
-                        Log.i("ApiProductDetailsRes ", shopsModels[j].getShop().getPhone());
+                       // Log.i("ApiProductDetailsRes ", shopsModels[j].getShop().getPhone());
                     }
 
 
@@ -884,10 +884,10 @@ public class VolleyHelper {
     }
 
     public static void requestPhoneContactsList() {
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getApiUrl(), null, new Response.Listener<JSONObject>() {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getApiUrl(), userObj, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.i("ApiQuestionResponse ", response.toString());
+                Log.i("ApiPhoneContacts", response.toString());
 
 
                 Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
