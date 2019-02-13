@@ -26,7 +26,7 @@ import static com.example.reda.categories.CategoriesFragment.categoryList;
 
 public class VolleyHelper {
 
-    private final static String API_URL = "http://192.168.1.4/ecommerce/public/api/";
+    private final static String API_URL = "http://192.168.1.8/ecommerce/public/api/";
     private final static String TYPE_LOGIN = "login";
     private final static String TYPE_REGISTER = "register";
     private final static String TYPE_UPDATE = "update";
@@ -172,6 +172,26 @@ public class VolleyHelper {
         }
 
         preparePath("favorites");
+
+    }
+
+      // set body for search request
+    public static void setProductSearch(SearchRequestModel data) {
+        userObj = new JSONObject();
+        try {
+            userObj.put("subcategory", data.getSubcategory());
+            userObj.put("address", data.getAddress());
+            userObj.put("company", data.getCompany());
+            userObj.put("initial_price", data.getInitial_price());
+            userObj.put("final_price", data.getFinal_price());
+            userObj.put("type",new JSONArray( data.getType()));
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        preparePath("products/search");
 
     }
 
@@ -1049,6 +1069,80 @@ public class VolleyHelper {
 
         requestQueue.add(request);
     }
+
+
+    public static void productSearch() {
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, getApiUrl(), userObj, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("ApiProductSearch", response.toString());
+
+
+                Gson gson = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("success");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    try {
+
+                        {
+                            ProductSearchModel model = gson.fromJson(jsonArray.get(i).toString(), ProductSearchModel.class);
+                            Log.i("ApiProductSearch", model.getName_en());
+                            Log.i("ApiProductSearch", String.valueOf(model.getCompany_id()));
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("ApiProductSearch", "Couldn't reach API");
+                Log.i("ApiProductSearch", String.valueOf(error));
+                Log.i("ApiProductSearch", getApiUrl());
+
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                final Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Accept", "application/json");
+
+                return headers;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+        };
+
+        requestQueue.add(request);
+
+
+    }
+
 
 
 }

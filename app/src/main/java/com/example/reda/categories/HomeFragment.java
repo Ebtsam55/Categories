@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import butterknife.Unbinder;
 
 
@@ -19,6 +21,7 @@ public class HomeFragment extends Fragment {
     private RecommendRequestModel recommendModel=new RecommendRequestModel();
     private PhoneContactsListModel contactsList= new PhoneContactsListModel();
     private FavoriteRequestModel favoriteModel = new FavoriteRequestModel();
+    private SearchRequestModel productSearchModel= new SearchRequestModel();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +54,20 @@ public class HomeFragment extends Fragment {
         favoriteModel.setUser_id(33);
 
 
+        productSearchModel.setAddress(12);
+        productSearchModel.setCompany(2);
+        productSearchModel.setInitial_price(200);
+        productSearchModel.setFinal_price(900);
+        productSearchModel.setSubcategory(4);;
+        ArrayList<Integer> typeArr=new ArrayList<Integer>(){
+            {
+                add(1);
+                add(2);
+            }
+        };
+        productSearchModel.setType(typeArr);
+
+
          loadCompanyRequest();
 
          loadProductRequest();
@@ -78,6 +95,8 @@ public class HomeFragment extends Fragment {
       loadFavoriteRequest(favoriteModel);
 
       loadFavoriteList();
+
+      requestProductSearch(productSearchModel);
 
         return view;
     }
@@ -189,5 +208,13 @@ public class HomeFragment extends Fragment {
         VolleyHelper.volleyInitialize(getContext());
         VolleyHelper.preparePath("favorites/favorite-list/33");
         VolleyHelper.loadFavoriteList();
+    }
+
+    private void requestProductSearch(SearchRequestModel data)
+    {
+        VolleyHelper.volleyInitialize(getContext());
+        VolleyHelper.setProductSearch(data);
+        VolleyHelper.productSearch();
+
     }
 }
